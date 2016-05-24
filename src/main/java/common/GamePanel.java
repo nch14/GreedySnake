@@ -30,11 +30,10 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                System.out.println("监听2");
+                
             }
             @Override
             public void keyPressed(KeyEvent e) {
-                System.out.println("监听");
                 if (e.getKeyCode()==KeyEvent.VK_LEFT||e.getKeyCode()==KeyEvent.VK_A)
                     snake.swift(0);
                 if (e.getKeyCode()==KeyEvent.VK_RIGHT||e.getKeyCode()==KeyEvent.VK_D)

@@ -9,6 +9,7 @@ public class Snake implements Runnable{
     ArrayList<Body> bodies;
     int guide=0;
     boolean state=true;
+    boolean adding;
     public Snake(){
         bodies=new ArrayList<>();
         int i=0;
@@ -29,20 +30,14 @@ public class Snake implements Runnable{
         t.start();
     }
 
-    public void addBody(){
-        Body body1=bodies.get(bodies.size()-2);
-        Body body2=bodies.get(bodies.size()-1);
-        if (body1.i==body2.i){
-            if(body1.j>body2.j)
-                bodies.add(new Body(body1.i,body2.j-1));
-            else
-                bodies.add(new Body(body1.i,body2.j+1));
-        }else{
-            if(body1.i>body2.i)
-                bodies.add(new Body(body2.i-1,body2.j));
-            else
-                bodies.add(new Body(body2.i+1,body2.j));
+    public void addBody(Body body){
+        adding=true;
+        ArrayList<Body> newBodies=new ArrayList<>();
+        newBodies.add(body);
+        for (int i=0;i<bodies.size();i++){
+            newBodies.add(bodies.get(i));
         }
+        adding=false;
     }
 
     public void check(){
@@ -61,10 +56,8 @@ public class Snake implements Runnable{
         int i=bodies.get(0).i;
         int j=bodies.get(0).j;
         for (int i1=bodies.size()-1;i1>0;i1--){
-            System.out.println("第"+(i1+1)+"格的原位置为"+bodies.get(i1).i+" "+bodies.get(i1).j);
             bodies.get(i1).i=bodies.get(i1-1).i;
             bodies.get(i1).j=bodies.get(i1-1).j;
-            System.out.println("第"+(i1+1)+"格的现在位置为"+bodies.get(i1).i+" "+bodies.get(i1).j);
         }
         System.out.println(bodies.size());
         switch (guide){
@@ -98,7 +91,8 @@ public class Snake implements Runnable{
     @Override
     public void run() {
         while (state){
-            move();
+            if (!adding)
+                move();
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {

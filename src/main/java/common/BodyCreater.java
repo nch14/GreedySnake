@@ -16,19 +16,23 @@ public class BodyCreater implements Runnable {
         quan++;
         System.out.print("第"+quan+"个创造者");
     }
+    private Block creatBonus(){
+        int  i=(int)(Math.random()*30);
+        int  j=(int)(Math.random()*50);
+        Block block =new Block(i,j);
+        return block;
+    }
     @Override
     public void run() {
         while (true){
             try {
-                if (GamePanel.getInstance().doYouHaveBonus()){
-
-                }else {
-                    int  i=(int)(Math.random()*30);
-                    int  j=(int)(Math.random()*50);
-                    Block block =new Block(i,j);
-                    System.out.println("加了一块肉");
+                if (!GamePanel.getInstance().doYouHaveBonus()){
+                    Block block=creatBonus();
+                    while (GamePanel.getInstance().isSnakeBody(block)){
+                        block=creatBonus();
+                    }
                     GamePanel.getInstance().addBonus(block);
-                    t+=1;
+
                 }
                 Thread.sleep(200);
             } catch (InterruptedException e) {

@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
     private GamePanel(){
         this.setLayout(null);
-        this.setBounds(0,0,1000,600);
+        this.setBounds(0,25,1000,600);
         this.setBackground(Color.WHITE);
 
         snakeLabel=new ArrayList<>();
@@ -91,6 +91,13 @@ public class GamePanel extends JPanel implements Runnable{
             this.remove(addABody);
             hasBonus=false;
             return true;
+        }
+        return false;
+    }
+    public boolean isSnakeBody(Block block){
+        for (int i=0;i<snake.bodies.size();i++){
+            if(block.i==snake.bodies.get(i).i&&block.j==snake.bodies.get(i).j)
+                return true;
         }
         return false;
     }

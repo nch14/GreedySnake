@@ -6,6 +6,4 @@ package common;
 public class GameBoard {
     int lines=30;
     int rows=50;
-
-
 }

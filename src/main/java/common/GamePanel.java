@@ -12,8 +12,19 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel implements Runnable{
     ArrayList<JLabel> snakeLabel;
     Snake snake;
-    JLabel title;
-    public GamePanel(){
+
+    JLabel addABody;
+    Block bonus;
+    boolean hasBonus;
+
+
+    private static GamePanel gamePanel;
+    public static GamePanel getInstance(){
+        if (gamePanel==null)
+            gamePanel=new GamePanel();
+        return gamePanel;
+    }
+    private GamePanel(){
         this.setLayout(null);
         this.setBounds(0,0,1000,600);
         this.setBackground(Color.WHITE);
@@ -21,27 +32,23 @@ public class GamePanel extends JPanel implements Runnable{
         snakeLabel=new ArrayList<>();
         snake=new Snake();
         this.requestFocus();
-        title=new JLabel("HHH");
-        title.setOpaque(false);
-        title.setBackground(Color.black);
-        title.setBounds(0,400,400,30);
-        this.add(title);
 
         this.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                
+
             }
             @Override
             public void keyPressed(KeyEvent e) {
+                System.out.println("把蛇hhh");
                 if (e.getKeyCode()==KeyEvent.VK_LEFT||e.getKeyCode()==KeyEvent.VK_A)
-                    snake.swift(0);
+                    snake.changeFunction(0);
                 if (e.getKeyCode()==KeyEvent.VK_RIGHT||e.getKeyCode()==KeyEvent.VK_D)
-                    snake.swift(1);
+                    snake.changeFunction(1);
                 if (e.getKeyCode()==KeyEvent.VK_UP||e.getKeyCode()==KeyEvent.VK_W)
-                    snake.swift(2);
+                    snake.changeFunction(2);
                 if (e.getKeyCode()==KeyEvent.VK_DOWN|e.getKeyCode()==KeyEvent.VK_S)
-                     snake.swift(3);
+                     snake.changeFunction(3);
             }
 
             @Override
@@ -49,16 +56,49 @@ public class GamePanel extends JPanel implements Runnable{
 
             }
         });
+        addABody=new JLabel();
+        addABody.setOpaque(true);
+        addABody.setBackground(Color.black);
 
-        Thread t=new Thread(this);
-        t.start();
+        BodyCreater bodyCreater=BodyCreater.getInstance();
+
+        Thread tCreater=new Thread(bodyCreater);
+        tCreater.start();
+
+        Thread tDraw=new Thread(this);
+        tDraw.start();
+
+        Thread tSnake=new Thread(snake);
+        tSnake.start();
+    }
+    public void addBonus(Block block){
+        bonus= block;
+        int x= block.i*20;
+        int y= block.j*20;
+        addABody.setBounds(y,x,20,20);
+        this.add(addABody);
+        hasBonus=true;
+        updateUI();
+    }
+    public boolean doYouHaveBonus(){
+        return hasBonus;
     }
 
+    public boolean isBonus(int i,int j){
+        if (bonus==null)
+            return false;
+        if(bonus.i==i&&bonus.j==j){
+            this.remove(addABody);
+            hasBonus=false;
+            return true;
+        }
+        return false;
+    }
     @Override
     public void run() {
         while (snake.state) {
             while (snakeLabel.size()<snake.bodies.size()){
-                snakeLabel.add(new JLabel("l"));
+                snakeLabel.add(new JLabel());
             }
             for (int i = 0; i < snakeLabel.size(); i++) {
                 try {

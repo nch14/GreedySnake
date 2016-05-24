@@ -9,7 +9,7 @@ public class GameFrame extends JFrame{
     public GameFrame(){
         this.setBounds(0,0,1000,600);
         this.setLayout(null);
-        GamePanel gamePanel=new GamePanel();
+        GamePanel gamePanel=GamePanel.getInstance();
         gamePanel.requestFocus();
         this.add(gamePanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

@@ -1,5 +1,7 @@
 package common;
 
+import view.GameFrame;
+
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
